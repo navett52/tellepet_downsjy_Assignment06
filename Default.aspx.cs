@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using ds_LoyaltyDropdownTableAdapters;
+using ds_StoreTableAdapters;
 
 public partial class _Default : System.Web.UI.Page {
     //Making the objects that interact with the DB
@@ -34,13 +35,21 @@ public partial class _Default : System.Web.UI.Page {
             ddTransType.DataSource = transTypes;
             ddTransType.DataBind();
 
-            //Populating Loyalty Numbers to drop down using data set
+            //Populating Loyalty Numbers to drop down using data set.
             tLoyaltyTableAdapter loyaltyAdapter = new tLoyaltyTableAdapter();
             ds_LoyaltyDropdown.tLoyaltyDataTable loyaltyNumber = loyaltyAdapter.GetData();
             ddLoyaltyNumbers.DataTextField = "LoyaltyNumber";
             ddLoyaltyNumbers.DataValueField = "LoyaltyID";
             ddLoyaltyNumbers.DataSource = loyaltyNumber;
             ddLoyaltyNumbers.DataBind();
+
+            //Populating Stores to drop down using data set.
+            tStoreTableAdapter storeAdapter = new tStoreTableAdapter();
+            ds_Store.tStoreDataTable store = storeAdapter.GetData();
+            ddStores.DataTextField = "Store";
+            ddStores.DataValueField = "StoreID";
+            ddStores.DataSource = store;
+            ddStores.DataBind();
         }
     }
 
