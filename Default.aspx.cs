@@ -61,28 +61,12 @@ public partial class _Default : System.Web.UI.Page {
             ddProduct.DataSource = product;
             ddProduct.DataBind();
 
-            //Populating Product into drop down using data set
-            tPriceTableAdapter priceAdapter = new tPriceTableAdapter();
-            ds_PricePerSellableUnitAsMarked.tProductDataTable pricePerSellableUnit = priceAdapter.GetData(Convert.ToInt32(ddProduct.SelectedValue));
-            ddPricePerSellableUnitAsMarked.DataTextField = "InitialPricePerSellableUnit";
-            ddPricePerSellableUnitAsMarked.DataValueField = "ProductID";
-            ddPricePerSellableUnitAsMarked.DataSource = pricePerSellableUnit;
-            ddPricePerSellableUnitAsMarked.DataBind();
-
-            ddPricePerSellableUnitToCustomer.Items.Clear();
-            ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
+            //Populating both price per sellable unit dropdowns on initial load
+            populatePriceDropdown();
         }
 
-        //Populating Product into drop down using data set
-        tPriceTableAdapter ipriceAdapter = new tPriceTableAdapter();
-        ds_PricePerSellableUnitAsMarked.tProductDataTable ipricePerSellableUnit = ipriceAdapter.GetData(Convert.ToInt32(ddProduct.SelectedValue));
-        ddPricePerSellableUnitAsMarked.DataTextField = "InitialPricePerSellableUnit";
-        ddPricePerSellableUnitAsMarked.DataValueField = "ProductID";
-        ddPricePerSellableUnitAsMarked.DataSource = ipricePerSellableUnit;
-        ddPricePerSellableUnitAsMarked.DataBind();
-
-        ddPricePerSellableUnitToCustomer.Items.Clear();
-        ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
+        //Repopulating both price per sellable unit dropdowns on any other load
+        populatePriceDropdown();
     }
 
 
@@ -129,4 +113,19 @@ public partial class _Default : System.Web.UI.Page {
             Response.Write("The time entered is not in the correct format!");
         } //test commenting stuffffffffffffffff
     }
+
+    public void populatePriceDropdown()
+    {
+        //Populating Product into drop down using data set
+        tPriceTableAdapter ipriceAdapter = new tPriceTableAdapter();
+        ds_PricePerSellableUnitAsMarked.tProductDataTable ipricePerSellableUnit = ipriceAdapter.GetData(Convert.ToInt32(ddProduct.SelectedValue));
+        ddPricePerSellableUnitAsMarked.DataTextField = "InitialPricePerSellableUnit";
+        ddPricePerSellableUnitAsMarked.DataValueField = "ProductID";
+        ddPricePerSellableUnitAsMarked.DataSource = ipricePerSellableUnit;
+        ddPricePerSellableUnitAsMarked.DataBind();
+
+        ddPricePerSellableUnitToCustomer.Items.Clear();
+        ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
+    }
+
 }
