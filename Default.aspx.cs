@@ -11,6 +11,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using ds_LoyaltyDropdownTableAdapters;
 using ds_StoreTableAdapters;
+using ds_ProductTableAdapters;
 
 public partial class _Default : System.Web.UI.Page {
     //Making the objects that interact with the DB
@@ -50,6 +51,14 @@ public partial class _Default : System.Web.UI.Page {
             ddStores.DataValueField = "StoreID";
             ddStores.DataSource = store;
             ddStores.DataBind();
+
+            //Populating Product into drop down using data set
+            tProductTableAdapter productAdapter = new tProductTableAdapter();
+            ds_Product.tProductDataTable product = productAdapter.GetData();
+            ddProduct.DataTextField = "Description";
+            ddProduct.DataValueField = "ProductID";
+            ddProduct.DataSource = product;
+            ddProduct.DataBind();
         }
     }
 
