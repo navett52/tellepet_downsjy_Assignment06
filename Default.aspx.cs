@@ -1,5 +1,6 @@
 ﻿/* Hello from Bill */
 
+using ds_TransTypeTableAdapters;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -27,6 +28,15 @@ public partial class _Default : System.Web.UI.Page
         {
             openConnection();
         }
+
+        //Populating the Transaction Type drop down using the databse.
+        tTransactionTypeTableAdapter transTypeAdapter = new tTransactionTypeTableAdapter();
+        ds_TransType.tTransactionTypeDataTable transTypes = transTypeAdapter.GetData();
+        ddTransType.DataTextField = "TransactionType";
+        ddTransType.DataValueField = "TransactionTypeID";
+        ddTransType.DataSource = transTypes;
+        ddTransType.DataBind();
+
     }
 
     /// <summary>
