@@ -15,10 +15,9 @@
         <asp:DropDownList ID="ddTransType" runat="server"></asp:DropDownList> <%-- No dependencies --%>
         <asp:DropDownList ID="ddStores" runat="server"></asp:DropDownList> <%-- No dependencies --%>
         <asp:DropDownList ID="ddEmpl" runat="server"></asp:DropDownList> <%-- Dependencies: Stores --%>
-        <asp:DropDownList ID="ddProduct" runat="server"></asp:DropDownList> <%-- Dependencies: Stores --%>
+        <asp:DropDownList ID="ddProduct" runat="server" AutoPostBack="true"></asp:DropDownList> <%-- Dependencies: Stores --%>
         <asp:TextBox ID="txtQty" runat="server"></asp:TextBox> <%-- Validate to only accept numbers --%>
         <asp:DropDownList ID="ddPricePerSellableUnitAsMarked" runat="server"></asp:DropDownList> <%-- Dependencies: Product --%>
-        <asp:SqlDataSource id="SqlDataSource1" runat="server" DataSourceMode="DataReader" ConnectionString="<%$ ConnectionStrings:GroceryStoreSimulatorPopulator%>" SelectCommand="SELECT InitialPricePerSellableUnit FROM tProduct WHERE ProductID =<%$ ddProduct.SelectedValue%>"></asp:SqlDataSource>
         <asp:DropDownList ID="ddPricePerSellableUnitToCustomer" runat="server"></asp:DropDownList> <%-- Dependencies: Product --%>
         <asp:TextBox ID="txtTransComment" runat="server"></asp:TextBox>
         <asp:TextBox ID="txtTransDetailComment" runat="server"></asp:TextBox>

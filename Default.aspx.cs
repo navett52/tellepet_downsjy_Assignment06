@@ -12,6 +12,7 @@ using System.Web.UI.WebControls;
 using ds_LoyaltyDropdownTableAdapters;
 using ds_StoreTableAdapters;
 using ds_ProductTableAdapters;
+using ds_PricePerSellableUnitAsMarkedTableAdapters;
 
 public partial class _Default : System.Web.UI.Page {
     //Making the objects that interact with the DB
@@ -59,7 +60,29 @@ public partial class _Default : System.Web.UI.Page {
             ddProduct.DataValueField = "ProductID";
             ddProduct.DataSource = product;
             ddProduct.DataBind();
+
+            //Populating Product into drop down using data set
+            tPriceTableAdapter priceAdapter = new tPriceTableAdapter();
+            ds_PricePerSellableUnitAsMarked.tProductDataTable pricePerSellableUnit = priceAdapter.GetData(Convert.ToInt32(ddProduct.SelectedValue));
+            ddPricePerSellableUnitAsMarked.DataTextField = "InitialPricePerSellableUnit";
+            ddPricePerSellableUnitAsMarked.DataValueField = "ProductID";
+            ddPricePerSellableUnitAsMarked.DataSource = pricePerSellableUnit;
+            ddPricePerSellableUnitAsMarked.DataBind();
+
+            ddPricePerSellableUnitToCustomer.Items.Clear();
+            ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
         }
+
+        //Populating Product into drop down using data set
+        tPriceTableAdapter ipriceAdapter = new tPriceTableAdapter();
+        ds_PricePerSellableUnitAsMarked.tProductDataTable ipricePerSellableUnit = ipriceAdapter.GetData(Convert.ToInt32(ddProduct.SelectedValue));
+        ddPricePerSellableUnitAsMarked.DataTextField = "InitialPricePerSellableUnit";
+        ddPricePerSellableUnitAsMarked.DataValueField = "ProductID";
+        ddPricePerSellableUnitAsMarked.DataSource = ipricePerSellableUnit;
+        ddPricePerSellableUnitAsMarked.DataBind();
+
+        ddPricePerSellableUnitToCustomer.Items.Clear();
+        ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
     }
 
 
