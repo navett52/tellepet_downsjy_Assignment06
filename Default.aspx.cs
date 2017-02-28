@@ -13,6 +13,8 @@ using ds_LoyaltyDropdownTableAdapters;
 using ds_StoreTableAdapters;
 using ds_ProductTableAdapters;
 using ds_PricePerSellableUnitAsMarkedTableAdapters;
+using ds_EmployeeTableAdapters;
+using ds_EmployeeOfSpecificStoreTableAdapters;
 
 public partial class _Default : System.Web.UI.Page {
     //Making the objects that interact with the DB
@@ -61,12 +63,24 @@ public partial class _Default : System.Web.UI.Page {
             ddProduct.DataSource = product;
             ddProduct.DataBind();
 
+            //Populating Employees into drop down using data set.
+            tEmplTableAdapter emplAdapter = new tEmplTableAdapter();
+            ds_Employee.tEmplDataTable employee = emplAdapter.GetData();
+            ddEmpl.DataTextField = "Empl";
+            ddEmpl.DataValueField = "EmplID";
+            ddEmpl.DataSource = employee;
+            ddEmpl.DataBind();
+
             //Populating both price per sellable unit dropdowns on initial load
             populatePriceDropdown();
+            //Populating Employee based on Store in initial Load
+            popluateEmployeeDropdown();
         }
 
         //Repopulating both price per sellable unit dropdowns on any other load
         populatePriceDropdown();
+        //Populating Employee based on Store on every other load
+        popluateEmployeeDropdown();
     }
 
 
@@ -111,7 +125,7 @@ public partial class _Default : System.Web.UI.Page {
         Regex checktime = new Regex(@"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$"); //Ref: http://stackoverflow.com/questions/884848/regular-expression-to-validate-valid-time
         if (!checktime.IsMatch(txtTimeOfTrans.Text)) {
             Response.Write("The time entered is not in the correct format!");
-        } //test commenting stuffffffffffffffff
+        }
     }
 
     public void populatePriceDropdown()
@@ -127,5 +141,14 @@ public partial class _Default : System.Web.UI.Page {
         ddPricePerSellableUnitToCustomer.Items.Clear();
         ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
     }
-
+    public void popluateEmployeeDropdown() 
+        {
+        //Populating employees based on the specified store 
+        tEmplStoreTableAdapter employeeStoreAdapter = new tEmplStoreTableAdapter();
+       ds_EmployeeOfSpecificStore.tEmplDataTable employee = employeeStoreAdapter.GetData(Convert.ToInt32(ddStores.SelectedValue));
+        ddEmpl.DataTextField = "Empl";
+        ddEmpl.DataValueField = "StoreID";
+        ddEmpl.DataSource = employee;
+        ddEmpl.DataBind();       
+    }
 }
