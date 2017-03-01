@@ -1,5 +1,13 @@
-﻿/* Hello from Bill */
-
+﻿/*<%--
+    Evan Tellep
+    Jeff Downs
+    ASP.NET
+    Bill Nicholson
+    3/1/2017
+    Assignment 06
+    Populating the form with the appropriate data then running the stored procedure.
+    Ref: Old Assignments
+--%>*/
 using ds_TransTypeTableAdapters;
 using System;
 using System.Collections.Generic;
@@ -15,6 +23,8 @@ using ds_ProductTableAdapters;
 using ds_PricePerSellableUnitAsMarkedTableAdapters;
 using ds_EmployeeTableAdapters;
 using ds_EmployeeOfSpecificStoreTableAdapters;
+using ds_CouponTableAdapters;
+using System.Data;
 
 public partial class _Default : System.Web.UI.Page {
     //Making the objects that interact with the DB
@@ -71,6 +81,14 @@ public partial class _Default : System.Web.UI.Page {
             ddEmpl.DataSource = employee;
             ddEmpl.DataBind();
 
+            //Populating Coupons into drop down using data set.
+            tCouponTableAdapter couponAdapter = new tCouponTableAdapter();
+            ds_Coupon.tCouponDataTable coupon = couponAdapter.GetData();
+            ddCoupon.DataTextField = "Coupon";
+            ddCoupon.DataValueField = "CouponDetailID";
+            ddCoupon.DataSource = coupon;
+            ddCoupon.DataBind();
+
             //Populating both price per sellable unit dropdowns on initial load
             populatePriceDropdown();
             //Populating Employee based on Store in initial Load
@@ -126,8 +144,22 @@ public partial class _Default : System.Web.UI.Page {
         if (!checktime.IsMatch(txtTimeOfTrans.Text)) {
             Response.Write("The time entered is not in the correct format!");
         }
+
+        openConnection();
+        SqlCommand command = new SqlCommand();
+        command.Connection = conn;
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "spAddTransactionAndDetail";
+        //command.Parameters.AddWithValue("@variable1", myvalue1);
+        //command.Parameters.AddWithValue("@variable2", myvalue2);
+        //command.Parameters.AddWithValue("@variable3", myvalue3);
+
     }
 
+    /// <summary>
+    /// This method populates the 2 price dropdowns based on what product was selected.
+    /// by Evan Tellep
+    /// </summary>
     public void populatePriceDropdown()
     {
         //Populating Product into drop down using data set
@@ -141,6 +173,8 @@ public partial class _Default : System.Web.UI.Page {
         ddPricePerSellableUnitToCustomer.Items.Clear();
         ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
     }
+
+
     public void popluateEmployeeDropdown() 
         {
         //Populating employees based on the specified store 
