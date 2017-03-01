@@ -91,12 +91,14 @@ public partial class _Default : System.Web.UI.Page {
 
             //Populating both price per sellable unit dropdowns on initial load
             populatePriceDropdown();
+
             //Populating Employee based on Store in initial Load
             popluateEmployeeDropdown();
         }
 
         //Repopulating both price per sellable unit dropdowns on any other load
         populatePriceDropdown();
+
         //Populating Employee based on Store on every other load
         popluateEmployeeDropdown();
     }
@@ -160,8 +162,7 @@ public partial class _Default : System.Web.UI.Page {
     /// This method populates the 2 price dropdowns based on what product was selected.
     /// by Evan Tellep
     /// </summary>
-    public void populatePriceDropdown()
-    {
+    public void populatePriceDropdown() {
         //Populating Product into drop down using data set
         tPriceTableAdapter ipriceAdapter = new tPriceTableAdapter();
         ds_PricePerSellableUnitAsMarked.tProductDataTable ipricePerSellableUnit = ipriceAdapter.GetData(Convert.ToInt32(ddProduct.SelectedValue));
@@ -175,14 +176,13 @@ public partial class _Default : System.Web.UI.Page {
     }
 
 
-    public void popluateEmployeeDropdown() 
-        {
+    public void popluateEmployeeDropdown() {
         //Populating employees based on the specified store 
         tEmplStoreTableAdapter employeeStoreAdapter = new tEmplStoreTableAdapter();
-       ds_EmployeeOfSpecificStore.tEmplDataTable employee = employeeStoreAdapter.GetData(Convert.ToInt32(ddStores.SelectedValue));
+        ds_EmployeeOfSpecificStore.tEmplDataTable employee = employeeStoreAdapter.GetData(Convert.ToInt32(ddStores.SelectedValue));
         ddEmpl.DataTextField = "Empl";
         ddEmpl.DataValueField = "StoreID";
         ddEmpl.DataSource = employee;
-        ddEmpl.DataBind();       
+        ddEmpl.DataBind();
     }
 }
