@@ -107,6 +107,7 @@ public partial class _Default : System.Web.UI.Page {
 
     /// <summary>
     /// Opening the database connection
+    /// by Bill Nicholson
     /// </summary>
     public void openConnection() {
         System.Configuration.ConnectionStringSettings strConn;
@@ -126,6 +127,7 @@ public partial class _Default : System.Web.UI.Page {
 
     /** Read the connection string from the web.config file. 
       * This is a much more secure way to store sensitive information. Don't hard-code connection information in the source code.
+      * by Bill Nicholson
       * Adapted from http://msdn.microsoft.com/en-us/library/ms178411.aspx
       */
     private System.Configuration.ConnectionStringSettings ReadConnectionString() {
@@ -140,7 +142,10 @@ public partial class _Default : System.Web.UI.Page {
         }
         return connString;
     }
-
+    
+    /// <summary>
+    /// Checking if time is in the correct format then populating the stored procedures parameters and calling it.
+    /// </summary>
     protected void btnSubmit_Click(object sender, EventArgs e) {
         //Checking with regex to see if time is properly entered
         Regex checktime = new Regex(@"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"); //Ref: http://stackoverflow.com/questions/884848/regular-expression-to-validate-valid-time
