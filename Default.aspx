@@ -26,7 +26,7 @@
         </div>
       <br />Loyalty Number
         <br /><asp:DropDownList ID="ddLoyaltyNumbers" runat="server"></asp:DropDownList> <%-- No dependencies --%>
-        <br />Time 
+        <br />Time (00:00:00)
          <br /> <asp:TextBox ID="txtTimeOfTrans" runat="server"></asp:TextBox> <%-- Use Regex to validate time format --%>
         <br />Type 
         <br /><asp:DropDownList ID="ddTransType" runat="server"></asp:DropDownList> <%-- No dependencies --%>

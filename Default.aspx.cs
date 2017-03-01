@@ -142,20 +142,36 @@ public partial class _Default : System.Web.UI.Page {
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e) {
-        Regex checktime = new Regex(@"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$"); //Ref: http://stackoverflow.com/questions/884848/regular-expression-to-validate-valid-time
+        //Checking with regex to see if time is properly entered
+        Regex checktime = new Regex(@"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"); //Ref: http://stackoverflow.com/questions/884848/regular-expression-to-validate-valid-time
         if (!checktime.IsMatch(txtTimeOfTrans.Text)) {
             Response.Write("The time entered is not in the correct format!");
+        } else
+        {
+            //If time is entered correctly disect the string and enter it into a TimeSpan object
+            TimeSpan timeOfTrans = new TimeSpan(Convert.ToInt32(txtTimeOfTrans.Text.Substring(0, 2)), Convert.ToInt32(txtTimeOfTrans.Text.Substring(3, 2)), Convert.ToInt32(txtTimeOfTrans.Text.Substring(6, 2)));
+            //Open the DB connection and proceed to populate the variables for the stored procedure
+            openConnection();
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = "spAddTransactionAndDetail";
+            command.Parameters.AddWithValue("@LoyaltyID", Convert.ToInt32(ddLoyaltyNumbers.SelectedValue));
+            command.Parameters.AddWithValue("@DateOfTransaction", calDateOfTrans.SelectedDate);
+            command.Parameters.AddWithValue("@TimeOfTransaction", timeOfTrans);
+            command.Parameters.AddWithValue("@TransactionTypeID", Convert.ToInt32(ddTransType.SelectedValue));
+            command.Parameters.AddWithValue("@StoreID", Convert.ToInt32(ddStores.SelectedValue));
+            command.Parameters.AddWithValue("@EmplID", Convert.ToInt32(ddEmpl.SelectedValue));
+            command.Parameters.AddWithValue("@ProductID", Convert.ToInt32(ddProduct.SelectedValue));
+            command.Parameters.AddWithValue("@Qty", Convert.ToInt32(txtQty.Text));
+            command.Parameters.AddWithValue("@PricePerSellableUnitAsMarked", Convert.ToDouble(ddPricePerSellableUnitAsMarked.SelectedValue));
+            command.Parameters.AddWithValue("@PricePerSellableUnitToTheCustomer", Convert.ToDouble(ddPricePerSellableUnitToCustomer.SelectedValue));
+            command.Parameters.AddWithValue("@TransactionComment", txtTransComment.Text);
+            command.Parameters.AddWithValue("@TransactionDetailComment", txtTransDetailComment.Text);
+            command.Parameters.AddWithValue("@couponDetailID", 42);
+            command.Parameters.AddWithValue("@TransactionID", 0);
+            command.ExecuteNonQuery();
         }
-
-        openConnection();
-        SqlCommand command = new SqlCommand();
-        command.Connection = conn;
-        command.CommandType = CommandType.StoredProcedure;
-        command.CommandText = "spAddTransactionAndDetail";
-        //command.Parameters.AddWithValue("@variable1", myvalue1);
-        //command.Parameters.AddWithValue("@variable2", myvalue2);
-        //command.Parameters.AddWithValue("@variable3", myvalue3);
-
     }
 
     /// <summary>
@@ -175,7 +191,10 @@ public partial class _Default : System.Web.UI.Page {
         ddPricePerSellableUnitToCustomer.Items.Add(new ListItem(ddPricePerSellableUnitAsMarked.SelectedItem.Text, ddPricePerSellableUnitAsMarked.SelectedValue));
     }
 
-
+    /// <summary>
+    /// Populating the employee dropdown list
+    /// by Jeff Downs
+    /// </summary>
     public void popluateEmployeeDropdown() {
         //Populating employees based on the specified store 
         tEmplStoreTableAdapter employeeStoreAdapter = new tEmplStoreTableAdapter();
