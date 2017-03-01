@@ -1,4 +1,15 @@
-﻿body {
+/*<%--
+    Evan Tellep
+    Jeff Downs
+    ASP.NET
+    Bill Nicholson
+    3/1/2017
+    Assignment 06
+    CSS to style the project
+    Ref:
+--%>*/
+/*CSS by Jeff*/
+body {
     background-color : #858484;
     align-content : center;
 }
